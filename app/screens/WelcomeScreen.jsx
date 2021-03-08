@@ -2,20 +2,20 @@ import React from "react";
 import { View, Text, ImageBackground, StyleSheet, Image } from "react-native";
 import AppButton from '../components/AppButton'
 import colors from '../config/colors'
-export default function WelcomeScreen({ logo, title }) {
+export default function WelcomeScreen({navigation}) {
   return (
     <ImageBackground
       style={styles.background}
       source={require("../assets/background.jpg")}
     >
       <View style={styles.logoContainer}>
-        <Image source={logo} style={styles.logo}></Image>
-        <Text style={styles.logoTitle}>{title}</Text>
+        <Image source={require("../assets/logo-red.png")} style={styles.logo}></Image>
+        <Text style={styles.logoTitle}>Sell What You Don't Need</Text>
       </View>
       <View style={styles.groupButton}>
         {/* <View style={styles.loginButton}></View> */}
-        <AppButton title="Login" style={styles.logoContainer} color="primary"/>
-        <AppButton title="Register" style={styles.logoContainer} color="secondary"/>
+        <AppButton title="Login" style={styles.logoContainer} color="primary" onPress={()=>navigation.navigate('Login')}/>
+        <AppButton title="Register" style={styles.logoContainer} color="secondary" onPress={()=>navigation.navigate('Register')}/>
       </View>
     </ImageBackground>
   );

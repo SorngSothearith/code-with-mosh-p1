@@ -3,12 +3,14 @@ import { Platform, StyleSheet, Text, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
 import defaultStyles from "../../config/styles";
+import { useFormikContext } from 'formik';
 export default function AppTextInput({
   icon,
+  name,
   width = "100%",
-  onChangeText,
   ...otherProps
 }) {
+  const { setFieldTouched, setFieldValue, errors, touched,values } = useFormikContext();
   return (
     <View style={[styles.container, { width: width }]}>
       {icon && (
@@ -23,7 +25,9 @@ export default function AppTextInput({
         style={defaultStyles.text}
         placeholderTextColor={defaultStyles.colors.medium}
         {...otherProps}
-        onChangeText={onChangeText}
+        onBlur={()=>setFieldTouched(name)}
+        onChangeText={(text)=>setFieldValue(name,text)}
+        value={values[name]}
       />
     </View>
   );

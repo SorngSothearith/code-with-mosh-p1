@@ -19,7 +19,7 @@ export default function AppFormPicker({
     numColumns,
     values,
   } = useFormikContext();
-  console.log("AppFormPicker", items);
+  // console.log("AppFormPicker", items);
   return (
     <>
       <AppPicker

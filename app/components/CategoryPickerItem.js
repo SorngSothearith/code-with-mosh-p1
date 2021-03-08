@@ -1,15 +1,21 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import AppText from "./AppText";
 import Icon from "./Icon";
 
 export default function CategoryPickerItem({ item, onPress }) {
-  console.log("kakskdkaskdkask", item.backgroundColor);
   return (
-    <View style={styles.container}>
-      <Icon backgroundColor="danger" name={item.icon} size={50}></Icon>
-      <AppText style={styles.label}>{item.label}</AppText>
-    </View>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={styles.container}>
+        <Icon
+          backgroundColor={item.backgroundColor}
+          name={item.icon}
+          size={50}
+        ></Icon>
+        <AppText style={styles.label}>{item.label}</AppText>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

@@ -1,28 +1,48 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Button, StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import listingApi from "../api/listings";
+import AppButton from "../components/AppButton";
 import AppCard from "../components/AppCard";
+import AppText from "../components/AppText";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
+import routes from "../navigation/routes";
+import ActivityIndicator from '../components/ActivityIndicator';
+import useApi from "../hooks/useApi";
 
-export default function ListingScreen() {
-  const listing = [
-    {
-      id: 1,
-      title: "Red jacket for sale",
-      price: 100,
-      image: require("../assets/jacket.jpg"),
-    },
-    {
-      id: 2,
-      title: "Couch in greate condition",
-      price: 1000,
-      image: require("../assets/couch.jpg"),
-    },
-  ];
+export default function ListingScreen({ navigation }) {
+  const getListings = useApi(listingApi.getListings)
+  console.log('data',getListings.data)
+  useEffect(() => {
+    getListings.request();
+  }, []);
   return (
     <Screen style={styles.screen}>
-      <FlatList data={listing} renderItem={({ item }) => <AppCard></AppCard>} />
+      {getListings.error && (
+        <>
+          <AppText>Couldn't retrieve the listing</AppText>
+          <AppButton
+            title="load listing"
+            color="primary"
+            onPress={loadListing}
+          />
+        </>
+      )}
+      <ActivityIndicator visible={getListings.loading}/>
+      <FlatList
+        data={getListings.data}
+        keyExtractor={(listings) => listings.id.toString()}
+        renderItem={({ item }) => (
+          <AppCard
+            title={item.title}
+            price={item.price}
+            image={item.images[0].url}
+            thumbnailUrl={item.images[0].thumbnailUrl}
+            onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
+          ></AppCard>
+        )}
+      />
     </Screen>
   );
 }

@@ -1,17 +1,21 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import {Image} from 'react-native-expo-image-cache'
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import colors from "../config/colors";
 import AppText from "./AppText";
 
-export default function AppCard() {
+export default function AppCard({ title,price,image,onPress,thumbnailUrl }) {
   return (
-    <View style={styles.card}>
-      <Image source={require("../assets/jacket.jpg")} style={styles.image} />
-      <View style={styles.detailContainer}>
-        <AppText style={styles.title}>Red Jacket for sale</AppText>
-        <AppText style={styles.subTitle}>100$</AppText>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={styles.card}>
+        <Image uri={image} style={styles.image} preview={{uri:thumbnailUrl}} tint="light"/>
+        <View style={styles.detailContainer}>
+          <AppText style={styles.title}>{title}</AppText>
+          <AppText style={styles.subTitle}>{price} $</AppText>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

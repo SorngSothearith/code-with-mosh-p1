@@ -1,11 +1,21 @@
-import React from "react";
+import React,{useContext} from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Screen from "../components/Screen";
 import ListItem from "../components/ListItem";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
 import { FlatList } from "react-native-gesture-handler";
-export default function MyAccountScreen() {
+import AuthContext from '../auth/context';
+import authStorage from '../auth/storage'
+export default function MyAccountScreen({navigation}) {
+  const {user,setUser}= useContext(AuthContext);
+
+  const handleLogout = async () => {
+    setUser(null)
+    return await authStorage.removeToken()
+  }
+
+
   const menuItem = [
     {
       title: "My Listings",
@@ -13,6 +23,7 @@ export default function MyAccountScreen() {
         name: "format-list-bulleted",
         backgroundColor: "primary",
       },
+      target:''
     },
     {
       title: "My Messages",
@@ -20,20 +31,23 @@ export default function MyAccountScreen() {
         name: "email",
         backgroundColor: "secondary",
       },
+      target:'Messages'
     },
+    
   ];
   return (
     <Screen style={styles.screen}>
       <ListItem
         image={require("../assets/mosh.jpg")}
-        title="Sorng Sothearith"
-        subTitle="sorngsothearith@gmail.com"
+        title={user.name}
+        subTitle={user.email}
         style={styles.profileCard}
         onPress={() => console.log("kkk")}
       />
       <View style={styles.container}>
         <FlatList
           data={menuItem}
+          keyExtractor={(item,key)=>key.toString()}
           renderItem={({ item }) => (
             <ListItem
               title={item.title}
@@ -44,39 +58,17 @@ export default function MyAccountScreen() {
                 />
               }
               style={{ backgroundColor: "white" }}
+              onPress={()=>navigation.navigate(item.target)}
             />
           )}
         ></FlatList>
       </View>
-      <View>
         <ListItem
+          onPress={handleLogout}
           title="Logout"
-          IconComponent={<Icon name="logout" backgroundColor="yellow" />}
+          IconComponent={<Icon name="logout" backgroundColor="yellow" 
+          />}
         />
-      </View>
-      {/* <ListItem
-        // image={require("../assets/mosh.jpg")}
-        IconComponent={
-          <Icon
-            backgroundColor="danger"
-            name="email"
-            size={50}
-            iconColor="white"
-          />
-        }
-        title="Sorng Sothearith"
-        // subTitle="sorngsothearith@gmail.com"
-        style={styles.profileCard}
-        onPress={() => console.log("kkk")}
-      /> */}
-      {/* <Icon backgroundColor="danger" name="email" size={100} iconColor="white" /> */}
-      {/* <ListItem
-        image={require("../assets/mosh.jpg")}
-        title="Sorng Sothearith"
-        subTitle="sorngsothearith@gmail.com"
-        style={styles.profileCard}
-        onPress={() => console.log("kkk")}
-      /> */}
     </Screen>
   );
 }
